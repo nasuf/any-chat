@@ -47,11 +47,6 @@ public class ChatMessage {
 
     @Override
     public String toString() {
-        return "ChatMessage{" +
-                "type=" + type +
-                ", content='" + content + '\'' +
-                ", sender='" + sender + '\'' +
-                ", chatRoom='" + chatRoom + '\'' +
-                '}';
+        return String.format("User [%s] sent message to chat room [%s]: [%s]", sender, chatRoom, content);
     }
 }

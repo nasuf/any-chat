@@ -17,12 +17,11 @@ public class ChatService {
     private SimpMessageSendingOperations simpMessageSendingOperations;
 
     public void sendMsg(@Payload ChatMessage chatMessage) {
-        LOGGER.info("Send msg by simpMessageSendingOperations:" + chatMessage.toString());
+        LOGGER.info(chatMessage.toString());
         simpMessageSendingOperations.convertAndSend(String.format("/topic/%s", chatMessage.getChatRoom()), chatMessage);
     }
 
     public void alertUserStatus(@Payload ChatMessage chatMessage) {
-        LOGGER.info("Alert user online by simpMessageSendingOperations:" + chatMessage.toString());
         simpMessageSendingOperations.convertAndSend(String.format("/topic/%s", chatMessage.getChatRoom()), chatMessage);
     }
 }

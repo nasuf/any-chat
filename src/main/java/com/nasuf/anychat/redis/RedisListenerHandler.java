@@ -50,7 +50,6 @@ public class RedisListenerHandler extends MessageListenerAdapter {
         try {
             rawMsg = redisTemplate.getStringSerializer().deserialize(body);
             topic = redisTemplate.getStringSerializer().deserialize(channel);
-            LOGGER.info("Received raw message from topic:" + topic + ", raw message content：" + rawMsg);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             return;

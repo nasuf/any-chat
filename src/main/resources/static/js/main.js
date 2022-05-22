@@ -13,20 +13,22 @@ var stompClient = null;
 var username = null;
 var chatroom = null;
 
+// '#' + Math.floor(Math.random() * 16777215).toString(16)
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
-    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
+    '#ffc107', '#ff85af', '#FF9800', '#39bbb0',
+    '#6A5ACD', '#000080', '#1E90FF', '#FFA500'
 ];
 
-function connect() {
+function connect(event) {
     if (username == null) {
         username = document.querySelector('#name').value.trim();
     }
     if (chatroom == null) {
-        chatroom = document.querySelector('#chatroom').value.trim().replace(/\s*/g,'');
+        chatroom = document.querySelector('#chatroom').value.trim().replace(/\s*/g, '');
     }
 
-    if(username) {
+    if (username) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
@@ -46,7 +48,7 @@ function onConnected() {
     // Tell your username to the server
     stompClient.send("/app/chat.addUser",
         {},
-        JSON.stringify({sender: username, type: 'JOIN', chatRoom: chatroom})
+        JSON.stringify({ sender: username, type: 'JOIN', chatRoom: chatroom })
     )
 
     connectingElement.classList.add('hidden');
@@ -57,14 +59,14 @@ function onConnected() {
 function onError(error) {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
     connectingElement.style.color = 'red';
-    connect();
+    setTimeout("connect()", 500);
 }
 
 
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
 
-    if(messageContent && stompClient) {
+    if (messageContent && stompClient) {
         var chatMessage = {
             sender: username,
             content: messageInput.value,
@@ -84,12 +86,12 @@ function onMessageReceived(payload) {
 
     var messageElement = document.createElement('li');
 
-    if(message.type === 'JOIN') {
+    if (message.type === 'JOIN') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' joined!';
+        message.content = message.sender + ' joined !';
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' left!';
+        message.content = message.sender + ' left !';
     } else {
         messageElement.classList.add('chat-message');
 

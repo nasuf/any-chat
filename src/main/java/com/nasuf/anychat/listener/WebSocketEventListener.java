@@ -25,9 +25,6 @@ public class WebSocketEventListener {
     @Value("${server.port}")
     private String serverPort;
 
-    @Value("${redis.set.onlineUsers}")
-    private String onlineUsers;
-
     @Value("${redis.channel.userStatus}")
     private String userStatus;
 
@@ -52,14 +49,16 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String chatroom = (String) headerAccessor.getSessionAttributes().get("chatroom");
 
         if(username != null) {
             LOGGER.info("User Disconnected : " + username);
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
             chatMessage.setSender(username);
+            chatMessage.setChatRoom(chatroom);
             try {
-                redisTemplate.opsForSet().remove(onlineUsers, username);
+                redisTemplate.opsForSet().remove(chatroom, username);
                 redisTemplate.convertAndSend(userStatus, JsonUtil.parseObjToJson(chatMessage));
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
