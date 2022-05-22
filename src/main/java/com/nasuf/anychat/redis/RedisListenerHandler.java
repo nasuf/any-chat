@@ -12,17 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Service;
 
-/**
- * Redis订阅频道处理类
- * @author yangzhendong01
- */
 @Service
 public class RedisListenerHandler extends MessageListenerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RedisListenerHandler.class);
-
-/*    @Value("${redis.channel.msgToAll}")
-    private String msgToAll;*/
 
     @Value("${redis.channel.userStatus}")
     private String userStatus;
@@ -36,12 +29,6 @@ public class RedisListenerHandler extends MessageListenerAdapter {
     @Autowired
     private ChatService chatService;
 
-    /**
-     * 收到监听消息
-     * @param message
-     * @param bytes
-     */
-    @Override
     public void onMessage(Message message, byte[] bytes) {
         byte[] body = message.getBody();
         byte[] channel = message.getChannel();
@@ -55,7 +42,7 @@ public class RedisListenerHandler extends MessageListenerAdapter {
             return;
         }
 
-       if (userStatus.equals(topic)) {
+        if (userStatus.equals(topic)) {
             ChatMessage chatMessage = JsonUtil.parseJsonToObj(rawMsg, ChatMessage.class);
             if (chatMessage != null) {
                 chatService.alertUserStatus(chatMessage);
