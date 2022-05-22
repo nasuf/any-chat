@@ -63,6 +63,7 @@ public class ChatController {
             if (chatMessage.getType().equals(ChatMessage.MessageType.JOIN) && !chatRooms.contains(chatMessage.getChatRoom())) {
                 container.addMessageListener(redisListenerHandler, new PatternTopic(chatMessage.getChatRoom()));
             }
+            String s = redisTemplate.opsForValue().get(onlineUsers);
             redisTemplate.opsForSet().add(onlineUsers, chatMessage.getSender());
             redisTemplate.convertAndSend(userStatus, JsonUtil.parseObjToJson(chatMessage));
         } catch (Exception e) {

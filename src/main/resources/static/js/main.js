@@ -18,9 +18,13 @@ var colors = [
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
-function connect(event) {
-    username = document.querySelector('#name').value.trim();
-    chatroom = document.querySelector('#chatroom').value.trim().replace(/\s*/g,'');
+function connect() {
+    if (username == null) {
+        username = document.querySelector('#name').value.trim();
+    }
+    if (chatroom == null) {
+        chatroom = document.querySelector('#chatroom').value.trim().replace(/\s*/g,'');
+    }
 
     if(username) {
         usernamePage.classList.add('hidden');
@@ -53,6 +57,7 @@ function onConnected() {
 function onError(error) {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
     connectingElement.style.color = 'red';
+    connect();
 }
 
 
